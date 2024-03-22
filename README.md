@@ -7,9 +7,9 @@ Data preparation
 3. Generate the adjacency matrix of the protein by running the create_adj_predict.py file in the script folder.
 
 Training
-Run train_val_bestAUPR_predicted.py for model training
+1. Run train_val_bestAUPR_predicted.py for model training
 
 Test
-Run test_129_final.py for model testing
-Run test_181_final.py for independent test set testing.
+1. Run test_129_final.py for model testing
+2. Run test_181_final.py for independent test set testing.
 Pre training model acquisition can be found in the link: https://drive.google.com/drive/my-drive
