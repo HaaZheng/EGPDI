@@ -99,7 +99,6 @@ lamda=1.1
 alpha=0.1
 atten_time=8
 
-# 构建五倍交叉验证适用的数据
 IDs = query_ids[:573]
 
 sequences = []
@@ -120,7 +119,6 @@ features = X_train
 
 coors = get_coor_train(dis_path, query_ids)
 
-# use predicted structure to create new adj->graph->efeats
 adjs = get_adj_predicted(IDs)
 
 graphs = []
@@ -128,19 +126,6 @@ for adj in adjs:
     edge_index, _ = dense_to_sparse(adj)
     G = dgl.graph((edge_index[0], edge_index[1])).to(device)
     graphs.append(G)
-
-# # 先创建，后直接读取边特征
-# print('start to prepare edge features')
-# efeats = []
-# for i in range(len(IDs)):
-#     edge_feats = get_edge_attr_train(i,th=17,distance_matrixs=distance_matrixs)
-#     print(edge_feats.shape)
-#     efeats.append(edge_feats)
-# save_edgefeats_path = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/predicted_structure/Train_Test129/edge_features'
-# with open(save_edgefeats_path + '/EdgeFeats_predicted_SC_17.pkl', 'wb') as f:
-#     pickle.dump(efeats, f)
-
-# 573
 
 save_edgefeats_path = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/predicted_structure/Train_Test129/edge_features/EdgeFeats_predicted_SC_17.pkl'
 with open(save_edgefeats_path, 'rb') as f:
@@ -407,22 +392,6 @@ def train_1(model,train_dataframe,valid_dataframe,fold = 0):
         print("Valid auc: ", valid_results['auc'])
         print("Valid pr_auc: ", valid_results['pr_auc'])
         print("Running Time: ", run_time)
-
-        # record_path = '/home/lichangyong/Documents/zmx/Graph_fusion/record/' + 'fold' + str(fold) + '.txt'
-        # with open(record_path, 'a') as f:
-        #     f.write('epoch' + str(epoch + 1) + '\n')
-        #     f.write("========== Evaluate Valid set ========== \n")
-        #     f.write("Valid loss: {} \n".format(epoch_loss_valid_avg))
-        #     f.write("Valid accuracy: {} \n".format(valid_results['accuracy']))
-        #     f.write("Valid spe: {} \n".format(valid_results['spe']))
-        #     f.write("Valid precision: {} \n".format(valid_results['precision']))
-        #     f.write("Valid recall: {} \n".format(valid_results['recall']))
-        #     f.write("Valid f1: {} \n".format(valid_results['f1']))
-        #     f.write("Valid mcc: {} \n".format(valid_results['mcc']))
-        #     f.write("Valid auc: {} \n".format(valid_results['auc']))
-        #     f.write("Valid pr_auc: {} \n".format(valid_results['pr_auc']))
-        #     f.write("Run time: {} \n".format(run_time))
-        #     f.write('\n')
 
         if best_val_prauc < valid_results['pr_auc']:
             best_epoch = epoch + 1
