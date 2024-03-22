@@ -12,4 +12,5 @@ Training
 Test
 1. Run test_129_final.py for model testing
 2. Run test_181_final.py for independent test set testing.
+   
 Pre training model acquisition can be found in the link: https://drive.google.com/drive/my-drive
