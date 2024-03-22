@@ -325,8 +325,8 @@ class Attention_1(nn.Module):
 
         batch_outputs = batch_outputs
 
-        # batch_outputs = torch.sum(batch_outputs, dim=1)        # 自己注释掉的，为了符合将多个gated attention 的结果进行拼接，不然就是没有len这个维度的了
-        # batch_outputs = batch_outputs[:,0]+batch_outputs[:,-1]      # 源代码本来就注释掉的，不用管
+        # batch_outputs = torch.sum(batch_outputs, dim=1)        
+        # batch_outputs = batch_outputs[:,0]+batch_outputs[:,-1]      
 
         return batch_outputs, attn_scores
 
