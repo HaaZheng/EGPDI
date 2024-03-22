@@ -1,11 +1,3 @@
-# 2024.1.9
-'''
-final training model files
-create trained model pkl file based on predicted structure files
-/home/lichangyong/Documents/zmx/Graph_fusion/models/AUPR_4_Predicted/  - predicted structure files with edge_feats trained on this file
-'''
-# undone
-# efeats shape is not suitable with other features
 
 import os
 import time
