@@ -35,12 +35,13 @@ Thirdly, run the script below to create edge features. The file can be found in 
 ```python 
 python3 create_edge.py 
 ```
-
+We provide all dataset at https://drive.google.com/drive/my-drive
 ### Model Training
 Run the following script to train the model.
 ```python
 python3 train_val_bestAUPR_predicted.py 
 ```
+We also provide pre-trained models at https://drive.google.com/drive/my-drive
 ### Inference on Pretrained Model
 Run the following script to test the model.
 ```python
