@@ -24,7 +24,7 @@ Firstly, run the script below to create node features(PSSM,HMM,SS,AF,One-hot enc
 ```python 
 python3 data_io.py 
 ```
-Secondly, run the script below to create node features(ESM2 embeddings and ProtTrans embeddings). The file can be found in scripts folder.
+Secondly, run the script below to create node features(ESM2 embeddings and ProtTrans embeddings). The file can be found in feature folder.
 ```python 
 python3 ESM2.py 
 ```
