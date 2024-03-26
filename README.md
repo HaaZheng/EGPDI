@@ -35,7 +35,7 @@ Thirdly, run the script below to create edge features. The file can be found in 
 ```python 
 python3 create_edge.py 
 ```
-We provide all datasets at https://drive.google.com/drive/my-drive
+And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from https://drive.google.com/drive/my-drive
 ### Model Training
 Run the following script to train the model.
 ```python
