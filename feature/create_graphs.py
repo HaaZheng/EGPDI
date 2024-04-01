@@ -30,14 +30,12 @@ def get_coor_test(dis_path,query_ids):
 
 def create_graph(src,dis,device):
 
-    G = dgl.graph((src,dis)).to(device)    # 用dgl.graph版本更快  旧版本使用dgl.DGLGraph
+    G = dgl.graph((src,dis)).to(device)  
 
     return G.to(device)
 
 def get_adj(pro_ids):
-
     adjs = []
-    #  create adj_SC_17 based on native structure
     save_files_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/intermediate_files/'
     fpath = save_files_dir +'Train_Test129/'
     adj_type = 'adj_SC_17'
@@ -45,25 +43,20 @@ def get_adj(pro_ids):
         file = fpath + adj_type + '/{}.pkl'.format(i)
         adj_load = open(file, 'rb')
         adj = pickle.load(adj_load)
-
         adjs.append(adj)
 
     return adjs
 
 def get_adj_predicted(pro_ids):
-
     adjs = []
-    #  create adj_SC_17 based on predicted structure
-    save_files_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/intermediate_files/'
-    # 129
-
+    ave_files_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/intermediate_files/'
+    
     fpath = save_files_dir +'Train_Test129/'
     adj_type = 'adj_SC_17_predicted'
     for i in pro_ids:
         file = fpath + adj_type + '/{}.pkl'.format(i)
         adj_load = open(file, 'rb')
         adj = pickle.load(adj_load)
-
         adjs.append(adj)
 
     return adjs
