@@ -32,7 +32,6 @@ features = []
 labels = []
 
 class CustomDataset(Dataset):
-
     def __init__(self, features, labels):
         self.features = features
         self.labels = labels
@@ -45,7 +44,6 @@ class CustomDataset(Dataset):
 
 
 root_dir = args.dataset_path
-
 test_path= root_dir + 'DNA_Test_181.txt'
 pkl_path= root_dir + 'PDNA_residue_feas_PHSA.pkl'
 esm2_5120_path= root_dir + 'ESM2-t48/'
@@ -54,13 +52,10 @@ dis_path= root_dir + 'PDNA_psepos_SC.pkl'
 ProtTrans_path = root_dir +  'ProtTrans/'
 msa_256_path = root_dir + 'MSA/'
 
-
 query_ids = []
-
 with open(test_path, 'r') as f:
     train_text = f.readlines()
     for i in range(0, len(train_text), 3):
-
         query_id = train_text[i].strip()[1:]
         if query_id[-1].islower():
             query_id += query_id[-1]
@@ -72,9 +67,7 @@ distance_matrixs=create_dis_matrix(dis_path,query_ids)
 X_test = X
 y_test = y
 
-
 NUMBER_EPOCHS = 30
-
 dr=0.3
 lr=0.0001
 nlayers=4
@@ -82,10 +75,7 @@ lamda=1.1
 alpha=0.1
 atten_time=8
 
-
 IDs = query_ids
-
-
 sequences = []
 labels = []
 with open(test_path,'r') as f:
@@ -97,15 +87,11 @@ with open(test_path,'r') as f:
         labels.append(label)
 
 sequences = sequences
-
-
 labels = y_test
 features = X_test
 
 coors = get_coor_test(dis_path, query_ids)
 adjs = get_adj_predicted(IDs)
-
-
 
 graphs = []
 for adj in adjs:
@@ -118,15 +104,12 @@ save_edgefeats_path = args.edgefeats_path
 with open(save_edgefeats_path, 'rb') as f:
     efeats = pickle.load(f)
 
-
 test_dic = {"ID": IDs, "sequence": sequences, "label": labels,'features':features,'coors':coors,'adj':adjs,'graph':graphs,'efeats':efeats}
 dataframe = pd.DataFrame(test_dic)
 
-
 class dataSet(data.Dataset):
-
+    
     def __init__(self,dataframe,adjs):
-
         self.names = dataframe['ID'].values
         self.sequences = dataframe['sequence'].values
         self.labels = dataframe['label'].values
@@ -137,7 +120,6 @@ class dataSet(data.Dataset):
         self.adj = dataframe['adj'].values
 
     def __getitem__(self,index):
-
         sequence_name = self.names[index]
         sequence = self.sequences[index]
         label = self.labels[index]
@@ -147,28 +129,22 @@ class dataSet(data.Dataset):
         graphs = self.graphs
         graph = graphs[index]
         adj = self.adj[index]
-
         efeat = self.efeats[index]
 
         return sequence_name,sequence,label,node_features,graph,efeat,adj,coor
 
 
     def __len__(self):
-
         return len(self.labels)
 
 
 def graph_collate(samples):
-
     _,_,label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch = map(list, zip(*samples))
-
     graph_batch = dgl.batch(graph_batch)
-
     return label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch
 
 
 def evaluate(model,data_loader):
-
     model.eval()
 
     epoch_loss = 0.0
@@ -177,15 +153,13 @@ def evaluate(model,data_loader):
     valid_true = []
 
     for label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch in data_loader:
-
         with torch.no_grad():
-
             node_features_batch = torch.tensor(node_features_batch)
             coors_batch = torch.tensor(coors_batch)
             adj_batch = adj_batch[0]
             label_batch = label_batch[0]
             efeat_batch = efeat_batch[0]
-
+            
             if torch.cuda.is_available():
                 node_features_batch = Variable(node_features_batch.cuda())
                 graph_batch = graph_batch.to(device)
@@ -227,15 +201,12 @@ def evaluate(model,data_loader):
 
 
 def analysis(y_true,y_pred,best_threshold = None):
-
     if best_threshold == None:
         best_mcc = 0
         best_threshold = 0
 
         for j in range(0, 100):
-
             threshold = j / 100000
-
             binary_pred = [1 if pred >= threshold else 0 for pred in y_pred]
             binary_true = y_true
             mcc = matthews_corrcoef(binary_true, binary_pred)
@@ -245,7 +216,6 @@ def analysis(y_true,y_pred,best_threshold = None):
                 best_threshold = threshold
 
     binary_pred = [1.0 if pred >= best_threshold else 0.0 for pred in y_pred]
-
     pre = precision_score(y_true, binary_pred, zero_division=0)
     recall = recall_score(y_true, binary_pred, zero_division=0)
     f1 = f1_score(y_true, binary_pred, zero_division=0)
@@ -277,7 +247,6 @@ def test_181(Model_Path):
     test_loader = torch.utils.data.DataLoader(test_dataSet, batch_size=1, shuffle=False, collate_fn=graph_collate)
 
     _, test_true, test_pred = evaluate(model, test_loader)
-
     test_results = analysis(test_true, test_pred)
 
     return test_results
@@ -309,7 +278,6 @@ recall = (test_results_1['recall']+test_results_2['recall']+test_results_3['reca
 f1 = (test_results_1['f1']+test_results_2['f1']+test_results_3['f1']+test_results_4['f1']+test_results_5['f1'])/5
 mcc = (test_results_1['mcc']+test_results_2['mcc']+test_results_3['mcc']+test_results_4['mcc']+test_results_5['mcc'])/5
 auc = (test_results_1['auc']+test_results_2['auc']+test_results_3['auc']+test_results_4['auc']+test_results_5['auc'])/5
-
 
 print("Independent test performance on our method")
 print("average spe: {:.3f} ".format(spe))
