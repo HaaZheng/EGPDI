@@ -20,7 +20,7 @@ class MainModel(nn.Module):
                                 dropout=dr,
                                 lamda=lamda, alpha=alpha, variant=True, heads=1)
 
-        self.multihead_attention = nn.ModuleList([Attention_1(hidden_size=512+128, num_attention_heads=16) for _ in range(atten_time)])  # gated attention  收敛比较快.本来是8
+        self.multihead_attention = nn.ModuleList([Attention_1(hidden_size=512+128, num_attention_heads=16) for _ in range(atten_time)]) 
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=lr,weight_decay=1e-16)
