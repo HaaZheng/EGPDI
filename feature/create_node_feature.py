@@ -1,12 +1,3 @@
-# 2023.12.12
-'''
-修改一：中文该英文，添加必要的注释说明，删去多余的代码 [done]
-修改二：修改奇怪和长的命名 [done]
-修改三：先一步一步的跑通代码，以保证代码无错 [undone，中间文件还未生成完成]
-修改四：把代码写的通俗易懂，最好写成长的特征加载写成一个独立的函数，再于主要的函数中调用，以保持代码的简洁性
-修改五：create_dis_matrix 这个函数放在 extract_edge_feature.py中比较合适 [done,增加了一个参数：所有蛋白质的id]
-'''
-
 import pickle
 import numpy as np
 import torch
@@ -35,22 +26,7 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
         2) Residual_feats(HMM-20dim,PSSM-30dim,AF-7dim,DSSP-14dim)
     '''
 
-    '''
-    :param query_ids: all protein_ids
-    :param all_702_path: 
-    :param train_path: 
-    :param test_path: 
-    :param pkl_path: 
-    :param esm2_33_path: 
-    :param esm2_5120_path: 
-    :param ProtTrans_path: 
-    :param dis_path: 
-    :return: 
-    '''
-
-
     # load protein_id,protein,seq,protein_label
-    # 考虑一下，直接用all_702_path,不要再分开数据集了，再注意一下命名，不要和主函数中的query_ids重复导致出错了
     with open(train_path,'r') as f:
         train_text = f.readlines()
         for i in range(0, len(train_text), 4):
@@ -60,7 +36,7 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
             query_seq = train_text[i + 1].strip()
             query_anno = train_text[i + 2].strip()
             train_list.append(query_id)
-            seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}   # 以id为索引，储存蛋白质序列和标签
+            seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}  
             Query_ids.append(query_id)
             query_seqs.append(query_seq)
 
@@ -82,7 +58,7 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
     query_seqs_702 = []
     with open(all_702_path, 'r') as f1:
         text_702 = f1.readlines()
-        for i in range(1, len(text_702), 3):        # *attention* # # 1,3 #
+        for i in range(1, len(text_702), 3):      
             query_seq_702 = text_702[i].strip()
             query_seqs_702.append(query_seq_702)
     encoded_proteins = [one_hot_encode(sequence) for sequence in query_seqs_702]
@@ -90,11 +66,9 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
     # load Residual_feats-71dim
     PDNA_residue_load=open(pkl_path,'rb')
     PDNA_residue=pickle.load(PDNA_residue_load)
-
     PDNA_residue['4ne1_p'] = PDNA_residue.pop('4ne1_pp')
 
-    # *attention* 其实这些代码都是重复的，可以写成一个函数，再调用#
-
+    
     # load esm2-t36 embeddings-33dim
     ESM2_33 = []
     paths = []
@@ -109,7 +83,7 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
     ESM2_5120 = []
     paths_5120 = []
     for i in query_ids:
-        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'   # use EquiPANS
+        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'  
         file_paths = esm2_5120_path + '{}'.format(i) + '.npy'
         paths_5120.append(file_paths)
     for file_path in paths_5120:
@@ -121,7 +95,7 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
     MSA_256 = []
     paths_256 = []
     for i in query_ids:
-        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'   # use EquiPANS
+        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'  
         file_paths = msa_256_path + '{}'.format(i) + 'msa_first_row.npy'
         paths_256.append(file_paths)
     for file_path in paths_256:
@@ -138,8 +112,6 @@ def create_features(query_ids,all_702_path,train_path,test_path,pkl_path,esm2_33
     for file_path in paths_1024:
         ProTrans_1024_embedding = torch.load(file_path)
         ProTrans_1024.append(ProTrans_1024_embedding)
-
-    # *attention* 其实这些代码都是重复的，可以写成一个函数，再调用#
 
     # load residue features-71dim and labels
     data = {}
