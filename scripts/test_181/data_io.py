@@ -554,12 +554,6 @@ def StatisticsSampleNum( test_list, seqanno):
     tb.field_names = ['Dataset', 'NumSeq', 'NumRes', 'NumPos', 'NumNeg', 'PNratio']
     tb.float_format = '0.3'
 
-    # seq_num, res_num, pos_num, neg_num, pnratio = sub(train_list + valid_list, seqanno)
-    # tb.add_row(['train+valid', seq_num, res_num, pos_num, neg_num, pnratio])
-    # seq_num, res_num, pos_num, neg_num, pnratio = sub(train_list, seqanno)
-    # tb.add_row(['train', seq_num, res_num, pos_num, neg_num, pnratio])
-    # seq_num, res_num, pos_num, neg_num, pnratio = sub(valid_list, seqanno)
-    # tb.add_row(['valid', seq_num, res_num, pos_num, neg_num, pnratio])
     seq_num, res_num, pos_num, neg_num, pnratio = sub(test_list, seqanno)
     tb.add_row(['test', seq_num, res_num, pos_num, neg_num, pnratio])
     print(tb)
@@ -590,18 +584,14 @@ if __name__ == '__main__':
         feature_list.append('AF')
         feature_combine += 'A'
 
-    # trainingset_dict = {'PDNA': 'DNA-573_Train.txt',
-    #                     }
-
+   
     testset_dict = {'PDNA': 'DNA_Test_181.txt',
                     }
     # use native pdb files
     Dataset_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/predicted_structure/Test_181_180'
 
     # use predicted pdb files
-    # Dataset_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/predicted_structure/Test_181'
     PDB_chain_dir = Dataset_dir + '/PDB'
-    # trainset_anno = Dataset_dir + '/{}'.format(trainingset_dict[ligand])
     testset_anno = Dataset_dir + '/{}'.format(testset_dict[ligand])
 
     seqanno = {}
@@ -609,26 +599,6 @@ if __name__ == '__main__':
     test_list = []
 
     if ligand in ['PDNA', 'PRNA']:
-        # with open(trainset_anno, 'r') as f:
-        #     train_text = f.readlines()
-        # if trans_anno:
-        #     for i in range(0, len(train_text), 4):
-        #         query_id = train_text[i].strip()[1:]
-        #         if query_id[-1].islower():
-        #             query_id += query_id[-1]
-        #         query_seq = train_text[i + 1].strip()
-        #         query_anno = train_text[i + 2].strip()
-        #         train_list.append(query_id)
-        #         seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}
-        # else:
-        #     for i in range(0, len(train_text), 4):
-        #         query_id = train_text[i].strip()[1:]
-        #         if query_id[-1].islower():
-        #             query_id += query_id[-1]
-        #         query_seq = train_text[i + 1].strip()
-        #         query_anno = train_text[i + 3].strip()
-        #         train_list.append(query_id)
-        #         seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}
         with open(testset_anno, 'r') as f:
             test_text = f.readlines()
         for i in range(0, len(test_text), 3):
@@ -640,15 +610,6 @@ if __name__ == '__main__':
             test_list.append(query_id)
             seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}
     else:
-        # with open(trainset_anno, 'r') as f:
-        #     train_text = f.readlines()
-        # for i in range(0, len(train_text), 3):
-        #     query_id = train_text[i].strip()[1:]
-        #     query_seq = train_text[i + 1].strip()
-        #     query_anno = train_text[i + 2].strip()
-        #     train_list.append(query_id)
-        #     seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}
-
         with open(testset_anno, 'r') as f:
             test_text = f.readlines()
         for i in range(0, len(test_text), 3):
@@ -658,7 +619,6 @@ if __name__ == '__main__':
             test_list.append(query_id)
             seqanno[query_id] = {'seq': query_seq, 'anno': query_anno}
 
-    # train_list, valid_list = tv_split(train_list, args.tvseed)
     StatisticsSampleNum( test_list, seqanno)
 
     PDB_DF_dir = Dataset_dir + '/PDB_DF'
