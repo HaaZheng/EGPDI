@@ -18,19 +18,16 @@ def ESM2(file):
         protein_id = lines[i].strip()[1:]
         sequence = lines[i + 1].strip()
         label = lines[i + 2].strip()
-
         lenn = len(label)
+        
         seq = ""
         for i in range(lenn):  
             seq = seq + sequence[i] + " "
 
         inputs = tokenizer(seq, return_tensors="pt")
-
         with torch.no_grad():
             embeddings = model(**inputs).logits
-
         embeddings = embeddings[0][1:-1].detach().cpu().numpy()  
-
         print(np.array(embeddings).shape)
 
         np.save(protein_id + '.npy', embeddings)
