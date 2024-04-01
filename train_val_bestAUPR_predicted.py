@@ -17,13 +17,11 @@ from feature.create_node_feature import create_dataset
 from feature.create_graphs import get_coor_train,get_adj_predicted
 from feature.create_edge import create_dis_matrix,get_edge_attr_train
 
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = 'cpu'
-
 import warnings
 warnings.filterwarnings("ignore")
 seed_value = 1995
 th=17
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # predicted structure
 Model_Path = '/home/lichangyong/Documents/zmx/Graph_fusion/models/AUPR_4_Predicted/'
@@ -32,7 +30,6 @@ features = []
 labels = []
 
 class CustomDataset(Dataset):
-
     def __init__(self, features, labels):
         self.features = features
         self.labels = labels
@@ -73,13 +70,9 @@ with open(test_path, 'r') as f:
         #     # print(query_id, '-' * 1000)
         query_ids.append(query_id)
 
-print(query_ids)
-print(len(query_ids))
-
 X,y = create_dataset(query_ids,train_path, test_path,all_702_path, pkl_path,esm2_33_path,esm2_5120_path,ProtTrans_path,mas_path,residue=True,one_hot=True,esm2_33=True,esm_5120=True,prottrans=True,msa=True)
-
 distance_matrixs=create_dis_matrix(dis_path,query_ids)
-print(len(distance_matrixs))
+
 
 X_train = X[:573]
 X_test = X[573:]
@@ -87,11 +80,11 @@ X_test = X[573:]
 y_train = y[:573]
 y_test = y[573:]
 
-
 NUMBER_EPOCHS = 30
 
 # final model parameters
-# dr=0.3,lr=0.0001,nlayers=4,lamda=1.1,alpha=0.1,atten_time=8, th trained on mcc and /100000 and saved bestAUPR model
+# dr=0.3,lr=0.0001,nlayers=4,lamda=1.1,alpha=0.1,atten_time=8, bestAUPR model
+
 dr=0.3
 lr=0.0001
 nlayers=4
@@ -100,7 +93,6 @@ alpha=0.1
 atten_time=8
 
 IDs = query_ids[:573]
-
 sequences = []
 labels = []
 with open(all_702_path,'r') as f:
@@ -113,12 +105,9 @@ with open(all_702_path,'r') as f:
 
 sequences = sequences[:573]
 
-
 labels = y_train
 features = X_train
-
 coors = get_coor_train(dis_path, query_ids)
-
 adjs = get_adj_predicted(IDs)
 
 graphs = []
@@ -138,7 +127,6 @@ dataframe = pd.DataFrame(train_dic)
 class dataSet(data.Dataset):
 
     def __init__(self,dataframe,adjs):
-
         self.names = dataframe['ID'].values
         self.sequences = dataframe['sequence'].values
         self.labels = dataframe['label'].values
@@ -149,7 +137,6 @@ class dataSet(data.Dataset):
         self.adj = dataframe['adj'].values
 
     def __getitem__(self,index):
-
         sequence_name = self.names[index]
         sequence = self.sequences[index]
         label = self.labels[index]
@@ -170,9 +157,7 @@ class dataSet(data.Dataset):
 
 
 def graph_collate(samples):
-
     _,_,label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch = map(list, zip(*samples))
-
     graph_batch = dgl.batch(graph_batch)
 
     return label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch
@@ -180,35 +165,32 @@ def graph_collate(samples):
 
 
 def train_one_epoch(model,data_loader):
-
     epoch_loss_train = 0.0
     n = 0
 
     for label_batch, node_features_batch, graph_batch,efeat_batch,adj_batch,coors_batch in data_loader:
 
         model.optimizer.zero_grad()
-
-        # sequence_name,sequence,label,node_features,graph,adj,coors
         node_features_batch = torch.tensor(node_features_batch)
         coors_batch = torch.tensor(coors_batch)
         adj_batch = adj_batch[0]
         label_batch = label_batch[0]
         efeat_batch = efeat_batch[0]
 
-        # if torch.cuda.is_available():
-        #     node_features_batch = Variable(node_features_batch.cuda())
-        #     graph_batch = graph_batch.to(device)
-        #     efeat_batch = efeat_batch.to(device)
-        #     adj_batch = Variable(adj_batch.cuda())
-        #     coors_batch = Variable(coors_batch.cuda())
-        #     y_true = label_batch
-        # else:
-        node_features_batch = Variable(node_features_batch)
-        graph_batch = graph_batch
-        adj_batch = Variable(adj_batch)
-        coors_batch = Variable(coors_batch)
-        y_true = label_batch
-        efeat_batch = efeat_batch
+        if torch.cuda.is_available():
+            node_features_batch = Variable(node_features_batch.cuda())
+            graph_batch = graph_batch.to(device)
+            efeat_batch = efeat_batch.to(device)
+            adj_batch = Variable(adj_batch.cuda())
+            coors_batch = Variable(coors_batch.cuda())
+            y_true = label_batch
+        else:
+            node_features_batch = Variable(node_features_batch)
+            graph_batch = graph_batch
+            adj_batch = Variable(adj_batch)
+            coors_batch = Variable(coors_batch)
+            y_true = label_batch
+            efeat_batch = efeat_batch
 
         # print('node_features',node_features_batch.shape)
         # print('graph',graph_batch)
@@ -259,20 +241,20 @@ def evaluate(model,data_loader):
             label_batch = label_batch[0]
             efeat_batch = efeat_batch[0]
 
-            # if torch.cuda.is_available():
-            #     node_features_batch = Variable(node_features_batch.cuda())
-            #     graph_batch = graph_batch.to(device)
-            #     efeat_batch = efeat_batch.to(device)
-            #     adj_batch = Variable(adj_batch.cuda())
-            #     coors_batch = Variable(coors_batch.cuda())
-            #     y_true = label_batch
-            # else:
-            node_features_batch = Variable(node_features_batch)
-            graph_batch = graph_batch
-            adj_batch = Variable(adj_batch)
-            coors_batch = Variable(coors_batch)
-            y_true = label_batch
-            efeat_batch = efeat_batch
+            if torch.cuda.is_available():
+                node_features_batch = Variable(node_features_batch.cuda())
+                graph_batch = graph_batch.to(device)
+                efeat_batch = efeat_batch.to(device)
+                adj_batch = Variable(adj_batch.cuda())
+                coors_batch = Variable(coors_batch.cuda())
+                y_true = label_batch
+            else:
+                node_features_batch = Variable(node_features_batch)
+                graph_batch = graph_batch
+                adj_batch = Variable(adj_batch)
+                coors_batch = Variable(coors_batch)
+                y_true = label_batch
+                efeat_batch = efeat_batch
 
             y_pred = model(graph_batch, node_features_batch, coors_batch, adj_batch, efeat_batch)
 
@@ -308,9 +290,7 @@ def analysis(y_true,y_pred,best_threshold = None):
         best_threshold = 0
 
         for j in range(0, 100):
-
             threshold = j / 100000  # pls change this threshold according to your code
-
             binary_pred = [1 if pred >= threshold else 0 for pred in y_pred]
             binary_true = y_true
             mcc = matthews_corrcoef(binary_true, binary_pred)
@@ -318,7 +298,7 @@ def analysis(y_true,y_pred,best_threshold = None):
             if mcc > best_mcc:
                 best_mcc = mcc
                 best_threshold = threshold
-    print('best_threshold',best_threshold)
+    # print('best_threshold',best_threshold)
     binary_pred = [1.0 if pred >= best_threshold else 0.0 for pred in y_pred]
 
     # correct_samples = (binary_pred == y_true).sum().item()
@@ -329,7 +309,6 @@ def analysis(y_true,y_pred,best_threshold = None):
     recall = recall_score(y_true, binary_pred, zero_division=0)
     f1 = f1_score(y_true, binary_pred, zero_division=0)
     mcc = matthews_corrcoef(y_true, binary_pred)
-
     auc = roc_auc_score(y_true, y_pred)
     pr_auc = average_precision_score(y_true, y_pred)
 
