@@ -1,5 +1,4 @@
 import sys
-
 import torch
 from transformers import T5EncoderModel, T5Tokenizer
 from transformers import BertModel, BertTokenizer
@@ -36,36 +35,28 @@ if torch.cuda.is_available():
 
 def read_sequence(file):
     sequence_dict = dict()
-
     with open(file, 'r') as file:
         lines = file.readlines()
-
     for i in range(0, len(lines), 3):
         protein_id = lines[i].strip()  
         if protein_id.startswith('>'):
             protein_id = protein_id[1:] 
         sequence = lines[i + 1].strip()
         label = lines[i + 2].strip()
-
         lenn = len(label)
         seq = ""
         for i in range(lenn):
             seq = seq + sequence[i] + " "
-        
         sequence_dict[protein_id] = seq
 
     return sequence_dict
 
 def embed_dataset(seq, shift_left = 0, shift_right = -1):
-
-
   with torch.no_grad():
     ids = tokenizer.batch_encode_plus([seq], add_special_tokens=True, padding=True, is_split_into_words=True,
                                       return_tensors="pt")
     embedding = model(input_ids=ids['input_ids'].to(device))[0]
     embedding= embedding[0].detach().cpu().numpy()[shift_left:shift_right]
-
-
   return embedding
 
 if "t5" in model_name:
@@ -83,14 +74,11 @@ elif "albert" in model_name:
 else:
   print("Unkown model name")
 
-
 sequence_file = 'Datasets/predicted_files/Train_Test129/DNA-573_Train.txt'
 feature_dir = 'Datasets/predicted_files/Train_Test129/ProtTrans/'
 sequence_dict = read_sequence(sequence_file)
 
-
 for protein_id in sequence_dict:
-
   seq = sequence_dict[protein_id]
   sample = list(seq)
   embedding = embed_dataset(sample, shift_left, shift_right)
