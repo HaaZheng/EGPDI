@@ -1,8 +1,3 @@
-# 2024.1.2
-'''
-
-'''
-
 import pickle
 import numpy as np
 import torch
@@ -33,23 +28,6 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
         2) Residual_feats(HMM-20dim,PSSM-30dim,AF-7dim,DSSP-14dim)
     '''
 
-    '''
-    :param query_ids: all protein_ids
-    :param all_702_path: 
-    :param train_path: 
-    :param test_path: 
-    :param pkl_path: 
-    :param esm2_33_path: 
-    :param esm2_5120_path: 
-    :param ProtTrans_path: 
-    :param dis_path: 
-    :return: 
-    '''
-
-
-    # load protein_id,protein,seq,protein_label
-    # 考虑一下，直接用all_702_path,不要再分开数据集了，再注意一下命名，不要和主函数中的query_ids重复导致出错了
-
     with open(test_path, 'r') as f:
         train_text = f.readlines()
         for i in range(0, len(train_text), 3):
@@ -65,11 +43,10 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
             query_seqs.append(query_seq)
 
     # load one-hot
-    # 6wq2_A 暂时还没有MSA所以要去掉，这里只有one-hot不是按照query_id来生成的，所以还是把6wq2_A算进去了，要自己去掉
     query_seqs_181 = []
     with open(test_path, 'r') as f1:
         text_181 = f1.readlines()
-        for i in range(1, len(text_181), 3):        # *attention* # # 1,3 #
+        for i in range(1, len(text_181), 3):     
             query_seq_181 = text_181[i].strip()
             if query_seq_181 != 'RRNRRLSSASVYRYYLKRISMNIGTTGHVNGLSIAGNPEIMRAIARLSEQETYNWVTDYAPSHLAKEVVKQISGKYNIPGAYQGLLMAFAEKVLANYILDYKGEPLVEIHHNFLWELMQGFIYTFVRKDGKPVTVDMSKVLTEIEDALFKLVKK':
                 query_seqs_181.append(query_seq_181)
@@ -78,8 +55,6 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
     # load Residual_feats-71dim
     PDNA_residue_load=open(pkl_path,'rb')
     PDNA_residue=pickle.load(PDNA_residue_load)
-
-    # *attention* 其实这些代码都是重复的，可以写成一个函数，再调用#
 
     # load esm2-t36 embeddings-33dim
     ESM2_33 = []
@@ -95,7 +70,7 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
     ESM2_5120 = []
     paths_5120 = []
     for i in query_ids:
-        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'   # use EquiPANS
+        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'   
         file_paths = esm2_5120_path + '{}'.format(i) + '.npy'
         paths_5120.append(file_paths)
     for file_path in paths_5120:
@@ -108,7 +83,7 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
     MSA_256 = []
     paths_256 = []
     for i in query_ids:
-        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'   # use EquiPANS
+        # file_paths = esm2_5120_path + '{}'.format(i) + '.rep_5120.npy'  
         file_paths = msa_256_path + '{}'.format(i) + 'msa_first_row.npy'
         paths_256.append(file_paths)
     for file_path in paths_256:
@@ -126,8 +101,7 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
         ProTrans_1024_embedding = torch.load(file_path)
         ProTrans_1024.append(ProTrans_1024_embedding)
 
-    # *attention* 其实这些代码都是重复的，可以写成一个函数，再调用#
-
+    
     # load residue features-71dim and labels
     data = {}
     for i in query_ids:
@@ -161,7 +135,6 @@ def create_features(query_ids,test_path,pkl_path,msa_256_path,esm2_5120_path,esm
 
     node_features={}
     for i in range(len(query_ids)):
-        # node_features[query_ids[i]]={'seq': i+1,'residue_fea': feature1[i],'esm2_33':feature5[i],'prottrans_1024':feature4[i],'one-hot':feature2[i],'label':protein_labels[i]}
         node_features[query_ids[i]]={'seq': i+1,'residue_fea': feature1[i],'esm2_5120':feature3[i],'esm2_33':feature5[i],'prottrans_1024':feature4[i],'one-hot':feature2[i],'msa_256':feature6[i],'label':protein_labels[i]}
 
     return node_features
@@ -208,14 +181,6 @@ def create_dataset(query_ids,test_path,pkl_path,esm2_5120_path,esm2_33_path,Prot
 
         mat5 = torch.Tensor(mat5)
         mat5 = torch.squeeze(mat5)
-
-        # print(i)
-        # print(mat1.shape)
-        # print(mat2.shape)
-        # print(mat3.shape)
-        # print(mat4.shape)
-        # print(mat5.shape)
-        # print(mat6.shape)
 
 
         # different feature combinations
