@@ -6,7 +6,7 @@ Mechanisms of protein-DNA interactions are involved in a wide range of biologica
 
 
 <div align=center>
-<img src="EGPDI.jpg" width=80%> width=80%/>
+<img src="EGPDI.jpg" width=60%> width=60%/>
 </div>
 
 
