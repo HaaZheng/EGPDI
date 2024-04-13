@@ -1,9 +1,10 @@
 # EGPDI: identifying Protein-DNA binding sites based on multi-view graph embedding fusion
 
+
 ## Abstract
 Mechanisms of protein-DNA interactions are involved in a wide range of biological activities and processes. Accurately identifying binding sites between proteins and DNA is crucial for analyzing genetic material, exploring protein functions, and designing novel drugs. In recent years, several computational methods have been proposed as alternatives to time-consuming and expensive traditional experiments. However, accurately predicting protein-DNA binding sites still remains a challenge. Existing computational methods often rely on handcrafted features and a single-model architecture, leaving room for improvement. We propose a novel computational method, called EGPDI, based on multi-view graph embedding fusion. This approach involves the integration of Equivariant Graph Neural Networks (EGNN) and Graph Convolutional Networks II (GCNII), independently configured to profoundly mine the global and local node embedding representations. An advanced gated multi-head attention mechanism is subsequently employed to capture the attention weights of the dual embedding representations, thereby facilitating the integration of node features. Besides, extra node features from protein language models are introduced to provide more structural information. To our knowledge, this is the first time that multi-view graph embedding fusion has been applied to the task of protein-DNA binding site prediction. The results of 5-fold cross-validation and independent testing demonstrate that EGPDI outperforms state-of-the-art methods. Further comparative experiments and case studies also verify the superiority and generalization ability of EGPDI.
 
-![image](EGPDI.png)
+<img src="EGPDI.png" width="100%">
 
 
 ## Preparation
