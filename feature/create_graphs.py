@@ -47,6 +47,7 @@ def get_adj(pro_ids):
 
     return adjs
 
+# use AlphaFold2 predicted structures to construct adj of protein graphs
 def get_adj_predicted(pro_ids):
     adjs = []
     ave_files_dir = '/home/lichangyong/Documents/zmx/Graph_fusion/Datasets/intermediate_files/'
