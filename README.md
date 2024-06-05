@@ -40,7 +40,7 @@ python3 ESM2.py
 ```python 
 python3 ProtTrans.py 
 ```
-We choose the esm2_t48_15B_UR50D pre-trained model of ESM-2, which has the most parameters. More details about it can be found at: https://huggingface.co/facebook/esm2_t48_15B_UR50D   </br>
+We choose the esm2_t36_3B_UR50D and esm2_t48_15B_UR50D pre-trained model of ESM-2 which has the most parameters. More details about it can be found at: https://huggingface.co/facebook/esm2_t48_15B_UR50D   </br>
 We also choose the prot_t5_xl_uniref50 pre-trained model of ProtTrans, which uses a masked language modeling(MLM). More details about it can be found at: https://huggingface.co/Rostlab/prot_t5_xl_uniref50    </br>
 
 **Thirdly**, run the script below to create edge features. The file can be found in feature folder.
