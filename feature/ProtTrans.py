@@ -1,3 +1,5 @@
+# generated prottrans embeddings from pre-trained protein language model
+
 import sys
 import torch
 from transformers import T5EncoderModel, T5Tokenizer
