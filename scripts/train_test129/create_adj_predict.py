@@ -37,6 +37,8 @@ print(len(query_ids))
 
 distance_matrixs=create_dis_matrix(dis_path,query_ids)
 
+
+# save adj_matrix of DNA_573_Train and DNA_129_Test
 def create_adj_pkl(query_ids,dis_matrix):
     for i in range(len(query_ids)):
         # create adj from distance matrix then creating edge_index
