@@ -27,11 +27,11 @@ The repo mainly requires the following packages.
 
 ## Experimental Procedure
 ### Create Dataset
-Firstly, run the script below to create node features(PSSM,HMM,SS,AF,One-hot encoding). The file can be found in scripts folder.
+**Firstly, run the script below to create node features(PSSM,HMM,SS,AF,One-hot encoding). The file can be found in scripts folder.**
 ```python 
 python3 data_io.py 
 ```
-Secondly, run the script below to create node features(ESM2 embeddings and ProtTrans embeddings). The file can be found in feature folder.
+**Secondly, run the script below to create node features(ESM2 embeddings and ProtTrans embeddings). The file can be found in feature folder.**
 We choose the esm2_t48_15B_UR50D pre-trained model of ESM-2, which has the most parameters. More details about it can be found at: https://huggingface.co/facebook/esm2_t48_15B_UR50D 
 We also choose the prot_t5_xl_uniref50 pre-trained model of ProtTrans, which uses a masked language modeling(MLM). More details about it can be found at: https://huggingface.co/Rostlab/prot_t5_xl_uniref50
 ```python 
@@ -40,17 +40,17 @@ python3 ESM2.py
 ```python 
 python3 ProtTrans.py 
 ```
-Thirdly, run the script below to create edge features. The file can be found in feature folder.
+**Thirdly, run the script below to create edge features. The file can be found in feature folder.**
 ```python 
 python3 create_edge.py 
 ```
-And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from https://drive.google.com/drive/my-drive
+**And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from https://drive.google.com/drive/my-drive**
 ### Model Training
 Run the following script to train the model.
 ```python
 python3 train_val_bestAUPR_predicted.py 
 ```
-We also provide pre-trained models at https://drive.google.com/drive/my-drive
+**We also provide pre-trained models at https://drive.google.com/drive/my-drive**
 ### Inference on Pretrained Model
 Run the following script to test the model.
 ```python
