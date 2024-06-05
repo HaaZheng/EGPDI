@@ -58,11 +58,11 @@ python3 train_val_bestAUPR_predicted.py
 **We also provide pre-trained models at** https://drive.google.com/drive/my-drive  </br>
 
 ### Inference on Pretrained Model
-Run the following script to test the model.
+Run the following script to test the model. Both test datasets, DNA_129_Test and DNA_181_Test , were included in the testing of the model.
 ```python
 python3 test_129_final.py 
 ```
 ```python
 python3 test_181_final.py 
 ```
-Both test datasets, DNA_129_Test and DNA_181_Test , were included in the testing of the model.
+
