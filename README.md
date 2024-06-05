@@ -33,7 +33,7 @@ python3 data_io.py
 ```
 
 **Secondly, run the script below to create node features(ESM2 embeddings and ProtTrans embeddings). The file can be found in feature folder.** </br>
-We choose the esm2_t48_15B_UR50D pre-trained model of ESM-2, which has the most parameters. More details about it can be found at: https://huggingface.co/facebook/esm2_t48_15B_UR50D 
+We choose the esm2_t48_15B_UR50D pre-trained model of ESM-2, which has the most parameters. More details about it can be found at: https://huggingface.co/facebook/esm2_t48_15B_UR50D   </br>
 We also choose the prot_t5_xl_uniref50 pre-trained model of ProtTrans, which uses a masked language modeling(MLM). More details about it can be found at: https://huggingface.co/Rostlab/prot_t5_xl_uniref50
 ```python 
 python3 ESM2.py 
