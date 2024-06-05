@@ -48,14 +48,14 @@ We also choose the prot_t5_xl_uniref50 pre-trained model of ProtTrans, which use
 python3 create_edge.py 
 ```
 
-**And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from ** https://drive.google.com/drive/my-drive </br>
+**And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from** https://drive.google.com/drive/my-drive </br>
 
 ### Model Training
 Run the following script to train the model.
 ```python
 python3 train_val_bestAUPR_predicted.py 
 ```
-**We also provide pre-trained models at ** https://drive.google.com/drive/my-drive  </br>
+**We also provide pre-trained models at** https://drive.google.com/drive/my-drive  </br>
 
 ### Inference on Pretrained Model
 Run the following script to test the model.
