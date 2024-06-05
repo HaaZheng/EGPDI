@@ -1,3 +1,5 @@
+# create edge_features of protein graphs on DNA_573_Train and DNA_129_Test
+
 import pickle
 import numpy as np
 import torch
@@ -39,7 +41,7 @@ def cal_edges(dis_matrix,protein_idx,th):
 
     return radius_index_list
 
-
+# calculate edge_features: distance_attrs and cos_similarity_attrs
 def calculate_edge_attributes(edge_index_list, distance_matrixs, protein_idx):
     pdist = nn.PairwiseDistance(p=2, keepdim=True)
     cossim = nn.CosineSimilarity(dim=0)
