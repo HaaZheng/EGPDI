@@ -65,4 +65,4 @@ python3 test_129_final.py
 ```python
 python3 test_181_final.py 
 ```
-Both datasets, DNA_129_Test and DNA_181_Test , were included in the testing of the model.
+Both test datasets, DNA_129_Test and DNA_181_Test , were included in the testing of the model.
