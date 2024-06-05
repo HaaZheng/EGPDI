@@ -26,7 +26,7 @@ The repo mainly requires the following packages.
 + seaborn==0.13.0
 
 ## Experimental Procedure
-### 1、Create Dataset
+### Create Dataset
 **Firstly, run the script below to create node features(PSSM,HMM,SS,AF,One-hot encoding). The file can be found in scripts folder.**
 ```python 
 python3 data_io.py 
@@ -49,14 +49,14 @@ python3 create_edge.py
 
 **And if you want to skip the long time preparation, please directly download the node_features and edge_features files which we already generated from https://drive.google.com/drive/my-drive** </br>
 
-### 2、Model Training
+### Model Training
 Run the following script to train the model.
 ```python
 python3 train_val_bestAUPR_predicted.py 
 ```
 **We also provide pre-trained models at https://drive.google.com/drive/my-drive**  </br>
 
-### 3、Inference on Pretrained Model
+### Inference on Pretrained Model
 Run the following script to test the model.
 ```python
 python3 test_129_final.py 
