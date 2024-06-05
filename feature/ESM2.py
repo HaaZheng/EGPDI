@@ -1,3 +1,5 @@
+# generate esm-2 embeddings from pre-trained protein language model
+
 import os, argparse
 import sys
 import numpy as np
